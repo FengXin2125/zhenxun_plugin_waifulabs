@@ -3,6 +3,7 @@
 """
 import random
 import os
+from pathlib import Path
 
 from nonebot import on_command
 from nonebot.rule import to_me
@@ -25,6 +26,13 @@ __plugin_cmd__ = [
 __plugin_type__ = ("来点好康的", 1)  # Use vertical cmd list cuz we have a lot of cmds
 __plugin_version__ = 0.10
 __plugin_author__ = "养猫的小天使喵"
+
+__plugin_settings__ = {
+    "level": 5,
+    "default_status": True,
+    "limit_superuser": False,
+    "cmd": ["生成老婆/老婆", "随机老婆"]
+}
 __plugin_cd_limit__ = {
     "cd": 30,
     "rst": "刚刚才获得一只老婆，这么快就要变心了吗！",
@@ -33,7 +41,7 @@ __plugin_block_limit__ = {
     "rst": "其他群友正在生成老婆哦~请等Ta先完成吧~"
 }
 __plugin_count_limit__ = {
-    "status": False,    # No daily usage limit
+    "status": False,  # No daily usage limit
 }
 # Asset folder that temporarily stores waifulabs screenshot
 # Use a sub-folder within this plugin's root.
@@ -48,11 +56,9 @@ __plugin_configs__ = {
 
 }
 
-
-
 # Matchers
-generate_waifu_matcher = on_command("生成老婆", aliases={"老婆"}, rule=to_me(), permission=GROUP, priority=4, block=True)
-generate_random_waifu_matcher = on_command("随机老婆", permission=GROUP, rule=to_me(), priority=4, block=True)
+generate_waifu_matcher = on_command("生成老婆", aliases={"老婆"}, permission=GROUP, priority=4, block=True)
+generate_random_waifu_matcher = on_command("随机老婆", permission=GROUP, priority=4, block=True)
 
 
 # Event responses
@@ -70,7 +76,7 @@ async def generate_waifu():
     # Construct response message
     msg = Message([
         MessageSegment.text("生成随机老婆成功！"),
-        MessageSegment.image(f"file://{waifu_img_path}")
+        MessageSegment.image(Path(waifu_img_path))
     ])
 
     await generate_random_waifu_matcher.finish(msg)
